@@ -51,6 +51,11 @@ they turn, use `cmux wallpaper rotate`.
 2D API) and contains no figures, characters or logos. It is MIT licensed like the rest of the
 repo. `tools/wallpapers/render.sh` redraws any of them byte for byte with headless Chrome.
 
+Gradients between two colors (teal to pink in the sound wave and the header, deep to light teal in
+the ribbons) are mixed in Oklab, as CSS `color-mix(in oklab, ...)` does, with a stop every tenth of
+the way. Mixed in plain sRGB, teal to pink sags into a darker gray-violet halfway; in Oklab its
+lightness runs evenly from one end to the other.
+
 ## Flourishes
 
 - The accent: selection, focus and the Send button take the theme's teal.
@@ -59,7 +64,7 @@ repo. `tools/wallpapers/render.sh` redraws any of them byte for byte with headle
 - Colors ease into place when the theme changes.
 - The cursor is pink.
 - `cmux-theme.json` also describes a soft teal accent glow, a blinking bar cursor, and teal to pink
-  for the tab-close animation. They apply where your cmux supports them.
+  (mixed in Oklab) for the tab-close animation. They apply where your cmux supports them.
 
 ## Colors and contrast
 

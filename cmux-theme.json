@@ -3,7 +3,7 @@
   "id": "teamleaderleo/teal-twin-theme",
   "name": "Teal Twin",
   "description": "Teal and pink: a dark look on deep teal-black and a light look on pale mint-white, with ten original teal-and-pink wallpapers.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "engines": { "cmux": ">=0.70.0" },
   "themes": ["themes/teal-twin-dark.json", "themes/teal-twin-light.json"],
   "use": "teal-twin-dark",
@@ -31,7 +31,7 @@
   "flourishes": {
     "accentGlow": { "dark": "#39c5bb", "light": "#39c5bb", "radius": 24, "opacity": 0.35 },
     "cursor": { "style": "bar", "blink": true, "color": { "dark": "#ff7eb9", "light": "#e12885" } },
-    "tabClose": { "from": "#39c5bb", "to": { "dark": "#ff7eb9", "light": "#e12885" } }
+    "tabClose": { "from": "#39c5bb", "to": { "dark": "#ff7eb9", "light": "#e12885" }, "interpolation": "oklab" }
   },
   "screenshots": ["screenshots/dark.png", "screenshots/light.png"],
   "repository": "https://github.com/teamleaderleo/teal-twin-theme",

@@ -24,6 +24,61 @@
     const n = parseInt(hex.slice(1), 16);
     return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`;
   }
+  // Oklab (Björn Ottosson's matrices, as CSS Color 4 uses them). A gradient between two
+  // different colors gets a stop every 0.1, each the CSS `color-mix(in oklab, A p%, B)` of its
+  // ends (alpha premultiplied, as color-mix does), so teal to pink never passes through the gray
+  // that the canvas's own gamma-sRGB interpolation draws. Computed here, not left to the browser,
+  // so the pictures are the same in any Chrome.
+  function toLinear(v) { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+  function fromLinear(v) {
+    v = v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055;
+    return Math.max(0, Math.min(255, Math.round(v * 255)));
+  }
+  function oklab(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    const r = toLinear(n >> 16), gr = toLinear((n >> 8) & 255), b = toLinear(n & 255);
+    const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * gr + 0.0514459929 * b);
+    const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * gr + 0.1073969566 * b);
+    const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * gr + 0.6299787005 * b);
+    return [
+      0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
+      1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
+      0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s,
+    ];
+  }
+  function fromOklab([L, A, B]) {
+    const l = Math.pow(L + 0.3963377774 * A + 0.2158037573 * B, 3);
+    const m = Math.pow(L - 0.1055613458 * A - 0.0638541728 * B, 3);
+    const s = Math.pow(L - 0.0894841775 * A - 1.2914855480 * B, 3);
+    return [
+      fromLinear(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
+      fromLinear(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
+      fromLinear(-0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s),
+    ];
+  }
+  // color-mix(in oklab, a (1-t), b): colors as [hex, alpha]; an rgba() string.
+  function mix([ha, aa], [hb, ab], t) {
+    const A = oklab(ha), B = oklab(hb), alpha = aa * (1 - t) + ab * t;
+    const lab = A.map((v, i) => alpha === 0 ? 0 : (v * aa * (1 - t) + B[i] * ab * t) / alpha);
+    const [r, gr, b] = fromOklab(lab);
+    return `rgba(${r},${gr},${b},${+alpha.toFixed(4)})`;
+  }
+  // Stops [[offset, hex, alpha], ...]: two different colors next to each other get oklab stops
+  // every 0.1 between them; one color fading in alpha keeps the canvas's own interpolation.
+  function stops(gradient, list) {
+    list.forEach(([at, hex, a], i) => {
+      gradient.addColorStop(at, rgba(hex, a));
+      const next = list[i + 1];
+      if (!next || next[1].toLowerCase() === hex.toLowerCase()) return;
+      const parts = Math.max(1, Math.round((next[0] - at) / 0.1));
+      for (let k = 1; k < parts; k++) {
+        gradient.addColorStop(at + (next[0] - at) * k / parts, mix([hex, a], [next[1], next[2]], k / parts));
+      }
+    });
+    return gradient;
+  }
+  window.tealTwinMix = mix; // for the check page
+
   function base() {
     const lg = g.createLinearGradient(0, 0, W, H);
     lg.addColorStop(0, P.bg2); lg.addColorStop(0.55, P.bg); lg.addColorStop(1, P.bg2);
@@ -76,7 +131,7 @@
       base();
       const bars = 160, gap = W / bars, mid = H * 0.5;
       const lg = g.createLinearGradient(0, 0, W, 0);
-      lg.addColorStop(0, P.teal); lg.addColorStop(0.5, P.tealHi); lg.addColorStop(1, P.pink);
+      stops(lg, [[0, P.teal, 1], [0.5, P.tealHi, 1], [1, P.pink, 1]]);
       for (let i = 0; i < bars; i++) {
         const u = i / bars;
         const env = Math.pow(Math.sin(Math.PI * u), 1.4);
@@ -135,9 +190,7 @@
             bx + side * W * 0.04 + off * 2.0, by + H * 0.82,
             bx + side * W * 0.10 + off * 2.4, H * 1.02);
           const lg = g.createLinearGradient(0, by, 0, H);
-          lg.addColorStop(0, rgba(P.tealHi, mode === "dark" ? 0.6 : 0.65));
-          lg.addColorStop(0.7, rgba(P.teal, 0.32));
-          lg.addColorStop(1, rgba(P.teal, 0.04));
+          stops(lg, [[0, P.tealHi, mode === "dark" ? 0.6 : 0.65], [0.7, P.teal, 0.32], [1, P.teal, 0.04]]);
           g.strokeStyle = lg;
           g.lineWidth = (k === 4 ? 16 : 3 + (k % 3) * 2.5) * S;
           g.lineCap = "round";
@@ -181,7 +234,7 @@
       glow(W * 0.9, H * 0.8, W * 0.5, P.pink, 0.22);
       const bars = 48, gap = W / bars, mid = H * 0.62;
       const bl = g.createLinearGradient(0, 0, W, 0);
-      bl.addColorStop(0, P.teal); bl.addColorStop(1, P.pink);
+      stops(bl, [[0, P.teal, 1], [1, P.pink, 1]]);
       for (let i = 0; i < bars; i++) {
         const u = i / bars;
         const h = H * 0.42 * Math.pow(Math.sin(Math.PI * u), 1.2) * (0.35 + 0.65 * Math.abs(Math.sin(i * 0.61) + 0.4 * Math.cos(i * 1.3)) / 1.4);
