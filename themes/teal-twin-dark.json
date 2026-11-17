@@ -1,8 +1,10 @@
-// Teal Twin Dark: teal #39C5BB on a deep teal-black, with a pink accent.
-// Every text color in the terminal palette is 4.5:1 or more on the background (WCAG AA).
+// Teal Twin Dark: teal #39C5BB on a deep teal-black, with a pink accent, over original abstract
+// wallpapers (waves, a sound wave, notes, ribbons, halftone) that change every hour.
+// Every text color in the terminal palette is 4.5:1 or more on the background (WCAG AA), also
+// over the brightest wallpaper pixel at the terminal's 0.88 opacity.
 {
   "name": "Teal Twin Dark",
-  "description": "Teal on a deep teal-black, with a pink accent.",
+  "description": "Teal on a deep teal-black, with a pink accent and teal-and-pink wallpapers.",
 
   // The terminal theme these colors edit; every color below replaces its own.
   "appearance.theme": "Builtin Dark",
@@ -14,20 +16,28 @@
     "accent": "#39c5bb",
     "palette": [
       "#1b2a2d", "#ff6b81", "#7fd99a", "#f2d479", "#6cb6ff", "#ff7eb9", "#39c5bb", "#c6dcd9",
-      "#6f8e92", "#ff8fa0", "#a3ebb6", "#f8e3a0", "#99ccff", "#ffa6cf", "#7de3da", "#f2fbfa"
+      "#86a5a9", "#ff8fa0", "#a3ebb6", "#f8e3a0", "#99ccff", "#ffa6cf", "#7de3da", "#f2fbfa"
     ]
   },
   // Selection, focus and the Send button take the theme's own teal.
   "appearance.accent": "theme",
 
-  // No wallpaper; a darker sidebar beside the terminals.
-  "appearance.background": "none",
+  // The wallpapers: the dark set, a new one every hour, under the window's glass.
+  "appearance.background": "folder:../wallpapers/dark",
+  "appearance.backgroundRotation": "hourly",
+  "appearance.backgroundOpacity": 0.9,
+
+  // A teal-black sidebar and terminals, a little see-through so the art shows at the edges.
   "appearance.sidebarSurface": "separate",
   "appearance.surfaces.sidebar.color": "#0a1214",
-  "appearance.surfaces.sidebar.opacity": 1,
+  "appearance.surfaces.sidebar.opacity": 0.92,
   "appearance.surfaces.terminal.color": "#0e1719",
-  "appearance.surfaces.terminal.opacity": 1,
+  "appearance.surfaces.terminal.opacity": 0.88,
 
-  // The pink accent: the mark that shows an agent at work.
-  "appearance.statusIndicator.color": "#ff7eb9"
+  // Flourishes: the focused pane's teal border, a pulsing pink dot while an agent works,
+  // and colors that ease when they change.
+  "appearance.focusIndicator": "border",
+  "appearance.statusIndicator.style": "dot",
+  "appearance.statusIndicator.color": "#ff7eb9",
+  "appearance.colorTransition.enabled": true
 }

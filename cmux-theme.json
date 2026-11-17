@@ -2,11 +2,37 @@
   "cmuxTheme": 1,
   "id": "teamleaderleo/teal-twin-theme",
   "name": "Teal Twin",
-  "description": "Teal and pink: a dark look on deep teal-black and a light look on pale mint-white.",
-  "version": "1.0.0",
+  "description": "Teal and pink: a dark look on deep teal-black and a light look on pale mint-white, with ten original teal-and-pink wallpapers.",
+  "version": "1.1.0",
   "engines": { "cmux": ">=0.70.0" },
   "themes": ["themes/teal-twin-dark.json", "themes/teal-twin-light.json"],
   "use": "teal-twin-dark",
+  "wallpapers": {
+    "dark": [
+      "wallpapers/dark/waves.webp", "wallpapers/dark/soundwave.webp", "wallpapers/dark/notes.webp",
+      "wallpapers/dark/ribbons.webp", "wallpapers/dark/halftone.webp"
+    ],
+    "light": [
+      "wallpapers/light/waves.webp", "wallpapers/light/soundwave.webp", "wallpapers/light/notes.webp",
+      "wallpapers/light/ribbons.webp", "wallpapers/light/halftone.webp"
+    ],
+    "pane": {
+      "dark": [
+        "wallpapers/pane/dark/waves.webp", "wallpapers/pane/dark/soundwave.webp", "wallpapers/pane/dark/notes.webp",
+        "wallpapers/pane/dark/ribbons.webp", "wallpapers/pane/dark/halftone.webp"
+      ],
+      "light": [
+        "wallpapers/pane/light/waves.webp", "wallpapers/pane/light/soundwave.webp", "wallpapers/pane/light/notes.webp",
+        "wallpapers/pane/light/ribbons.webp", "wallpapers/pane/light/halftone.webp"
+      ]
+    }
+  },
+  "header": { "dark": "header/dark.webp", "light": "header/light.webp" },
+  "flourishes": {
+    "accentGlow": { "dark": "#39c5bb", "light": "#39c5bb", "radius": 24, "opacity": 0.35 },
+    "cursor": { "style": "bar", "blink": true, "color": { "dark": "#ff7eb9", "light": "#e12885" } },
+    "tabClose": { "from": "#39c5bb", "to": { "dark": "#ff7eb9", "light": "#e12885" } }
+  },
   "screenshots": ["screenshots/dark.png", "screenshots/light.png"],
   "repository": "https://github.com/teamleaderleo/teal-twin-theme",
   "license": "MIT"

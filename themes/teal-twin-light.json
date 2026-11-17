@@ -1,9 +1,11 @@
 // Teal Twin Light: the light companion. Teal #39C5BB is the selection, a deeper teal the accent
-// (so it reads as text), pink the cursor. Every text color in the terminal palette is 4.5:1 or more on
-// the background (WCAG AA), except the two "white" slots, which are for backgrounds.
+// (so it reads as text), pink the cursor, over the light set of original abstract wallpapers.
+// Every text color in the terminal palette is 4.5:1 or more on the background (WCAG AA), also over
+// the strongest wallpaper pixel at the terminal's 0.88 opacity, except the two "white" slots,
+// which are for backgrounds.
 {
   "name": "Teal Twin Light",
-  "description": "Teal and pink on a pale mint-white.",
+  "description": "Teal and pink on a pale mint-white, with teal-and-pink wallpapers.",
 
   // The terminal theme these colors edit; every color below replaces its own.
   "appearance.theme": "Builtin Light",
@@ -14,21 +16,29 @@
     "selection": "#39c5bb",
     "accent": "#0a766f",
     "palette": [
-      "#2c3e41", "#c8283f", "#1f7a3d", "#8a6400", "#1f63b8", "#c2185f", "#0a766f", "#b8ccc9",
-      "#5e7377", "#a81f33", "#18642f", "#6e5000", "#174e93", "#a3134f", "#086158", "#e4f0ee"
+      "#2c3e41", "#b8243a", "#186f38", "#7e5b00", "#1f63b8", "#c2185f", "#086a63", "#b8ccc9",
+      "#4d6064", "#a81f33", "#18642f", "#6e5000", "#174e93", "#a3134f", "#086158", "#e4f0ee"
     ]
   },
   // Selection, focus and the Send button take the theme's own teal.
   "appearance.accent": "theme",
 
-  // No wallpaper; a pale teal sidebar beside the terminals.
-  "appearance.background": "none",
+  // The wallpapers: the light set, a new one every hour, under the window's glass.
+  "appearance.background": "folder:../wallpapers/light",
+  "appearance.backgroundRotation": "hourly",
+  "appearance.backgroundOpacity": 0.9,
+
+  // A pale teal sidebar and mint-white terminals, a little see-through so the art shows at the edges.
   "appearance.sidebarSurface": "separate",
   "appearance.surfaces.sidebar.color": "#e4f5f3",
-  "appearance.surfaces.sidebar.opacity": 1,
+  "appearance.surfaces.sidebar.opacity": 0.92,
   "appearance.surfaces.terminal.color": "#f7fcfb",
-  "appearance.surfaces.terminal.opacity": 1,
+  "appearance.surfaces.terminal.opacity": 0.88,
 
-  // The pink accent: the mark that shows an agent at work.
-  "appearance.statusIndicator.color": "#e12885"
+  // Flourishes: the focused pane's teal border, a pulsing pink dot while an agent works,
+  // and colors that ease when they change.
+  "appearance.focusIndicator": "border",
+  "appearance.statusIndicator.style": "dot",
+  "appearance.statusIndicator.color": "#e12885",
+  "appearance.colorTransition.enabled": true
 }
