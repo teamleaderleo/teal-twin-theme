@@ -1,0 +1,13 @@
+{
+  "cmuxTheme": 1,
+  "id": "teamleaderleo/teal-twin-theme",
+  "name": "Teal Twin",
+  "description": "Teal and pink: a dark look on deep teal-black and a light look on pale mint-white.",
+  "version": "1.0.0",
+  "engines": { "cmux": ">=0.70.0" },
+  "themes": ["themes/teal-twin-dark.json", "themes/teal-twin-light.json"],
+  "use": "teal-twin-dark",
+  "screenshots": ["screenshots/dark.png", "screenshots/light.png"],
+  "repository": "https://github.com/teamleaderleo/teal-twin-theme",
+  "license": "MIT"
+}
